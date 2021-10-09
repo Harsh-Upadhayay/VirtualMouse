@@ -6,13 +6,13 @@ cap = cv2.VideoCapture(0)
 cap.set(3, 640)
 cap.set(4, 480)
 pTime = 0
-detector = HandTrackingModule.handDetector(maxHands=1)
+detector = HandTrackingModule.handDetector(maxHands=2)
 
 while True:
     success, img = cap.read()
     img = cv2.flip(img, 1)
-    # img = detector.findHands(img)
-    # lmList, bbox = detector.findPosition(img)
+    img = detector.findHands(img)
+    lmList, bbox = detector.findPosition(img)
     cTime = time.time()
     fps = 1 / (cTime-pTime)
     pTime = cTime
