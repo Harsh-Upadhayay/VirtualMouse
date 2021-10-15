@@ -1,12 +1,19 @@
 import cv2
-import numpy
+import numpy as np
 import time
 import HandTrackingModule
+import pyautogui as pt
+
+
 cap =  cv2.VideoCapture(0, cv2.CAP_DSHOW)
-cap.set(3, 640)
-cap.set(4, 480)
+wCam = 640
+hCam = 480
+cap.set(3, wCam)
+cap.set(4, hCam)
 pTime = 0
 detector = HandTrackingModule.handDetector(maxHands=1)
+wScr , hScr = pt.size()
+
 
 while True:
     success, img = cap.read()
@@ -14,13 +21,19 @@ while True:
     img = detector.findHands(img)
     lmList, bbox = detector.findPosition(img)
 
-    x1,y1,x2,y2 = 0,0,0,0
+    x1,y1,x2,y2,x3,y3 = 0,0,0,0,0,0
     if len(lmList) != 0:
         x1, y1 = lmList[8][1:]
         x2, y2 = lmList[12][1:]
 
     fingers = detector.fingersUp()
     print(fingers)
+
+    # if fingers[1] and fingers[2]:
+    #     x3 = np.interp(x1, (0, wCam), (0, wScr))
+    #     y3 = np.interp(y1, (0, hCam), (0, hScr))
+    #     pt.moveTo(x3, y3)
+
     #print(x1, y1, x2, y2)
     cTime = time.time()
     fps = 1 / (cTime-pTime)
